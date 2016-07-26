@@ -2,7 +2,7 @@ package main
 
 import (
     "fmt"
-    "calc"
+    "github.com/calc"
     "bufio"
     "os"
     "strings"
@@ -10,7 +10,7 @@ import (
 
 func main () {
     reader := bufio.NewReader(os.Stdin)
-    result := 0
+    var result float32
 
     fmt.Println("Welcome to Mike's first Go calculator!")
     fmt.Println("This basic calculator supports addition, subtraction, multiplication, and division.")
@@ -36,6 +36,6 @@ func main () {
                 result = calc.Divide(formulaParts.Expression1, formulaParts.Expression2)
         }
 
-        fmt.Printf("The answer is %d\n", result)
+        fmt.Printf("The answer is %g\n", result)
     }
 }

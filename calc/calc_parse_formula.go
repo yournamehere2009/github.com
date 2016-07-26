@@ -8,8 +8,8 @@ import (
 // FormulaParts blah
 type FormulaParts struct {
     Operator string
-    Expression1 int
-    Expression2 int
+    Expression1 float32
+    Expression2 float32
 }
 
 //ParseFormula blah
@@ -28,11 +28,14 @@ func ParseFormula(formula string) *FormulaParts {
         }
     }
 
+
     // Next, get the first expression
-    f.Expression1, _ = strconv.Atoi(strings.TrimSpace(formula[:oIndex]))
+    e1, _ := strconv.ParseFloat(strings.TrimSpace(formula[:oIndex]), 32)
+    f.Expression1 = float32(e1)
 
     // Finally, get the second expression
-    f.Expression2, _ = strconv.Atoi(strings.TrimSpace(formula[oIndex + 1 : len(formula)]))
+    e2, _ := strconv.ParseFloat(strings.TrimSpace(formula[oIndex + 1 : len(formula)]), 32)
+    f.Expression2 = float32(e2)
 
     return f
 }

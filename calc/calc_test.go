@@ -2,7 +2,7 @@ package calc_test
 
 import (
     "testing"
-    "calc"
+    "github.com/calc"
 )
 
 func TestAdd(t *testing.T){

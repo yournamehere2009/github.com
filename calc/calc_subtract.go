@@ -1,6 +1,6 @@
 package calc
 
 //Subtract does
-func Subtract(a int, b int) int {
+func Subtract(a float32, b float32) float32 {
     return a-b;
 }
