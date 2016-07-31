@@ -28,7 +28,6 @@ func ParseFormula(formula string) *FormulaParts {
         }
     }
 
-
     // Next, get the first expression
     e1, _ := strconv.ParseFloat(strings.TrimSpace(formula[:oIndex]), 32)
     f.Expression1 = float32(e1)

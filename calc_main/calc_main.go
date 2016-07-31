@@ -10,7 +10,6 @@ import (
 
 func main () {
     reader := bufio.NewReader(os.Stdin)
-    var result float32
 
     fmt.Println("Welcome to Mike's first Go calculator!")
     fmt.Println("This basic calculator supports addition, subtraction, multiplication, and division.")
@@ -23,19 +22,6 @@ func main () {
             break;
         }
 
-        formulaParts := calc.ParseFormula(formula)
-
-        switch formulaParts.Operator {
-            case "+":
-                result = calc.Add(formulaParts.Expression1, formulaParts.Expression2)
-            case "-":
-                result = calc.Subtract(formulaParts.Expression1, formulaParts.Expression2)
-            case "*":
-                result = calc.Multiply(formulaParts.Expression1, formulaParts.Expression2)
-            case "/":
-                result = calc.Divide(formulaParts.Expression1, formulaParts.Expression2)
-        }
-
-        fmt.Printf("The answer is %g\n", result)
+        fmt.Printf("The answer is %g\n", calc.ComputeFormula(formula))
     }
 }

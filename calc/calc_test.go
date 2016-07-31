@@ -76,3 +76,54 @@ func TestParseFormulaMultiplication(t *testing.T) {
         t.Error("expecting expression2: 3")
     }
 }
+
+func TestComputeFormulaAdditionParens(t *testing.T) {
+    formula := "(2+2)+2"
+
+    result := calc.ComputeFormula(formula)
+
+    if result != 6 {
+        t.Error("expecting result: 6")
+    }
+}
+
+func TestComputeFormulaAdditionParensFloat(t *testing.T) {
+    formula := "(2.5+2)+2"
+
+    result := calc.ComputeFormula(formula)
+
+    if result != 6.5 {
+        t.Error("expecting result: 6.5")
+    }
+}
+
+func TestComputeFormulaAdditionMultiParensFloat(t *testing.T) {
+    formula := "(2.5+2)+(2+8)"
+
+    result := calc.ComputeFormula(formula)
+
+    if result != 14.5 {
+        t.Error("expecting result: 14.5")
+    }
+}
+
+// func TestComputeFormulaNestedParensFloat(t *testing.T) {
+//     formula := "(2.5*(2+5))+(2+(8-4))"
+
+//     result := calc.ComputeFormula(formula)
+
+//     if result != 23.5 {
+//         t.Error("expecting result: 23.5");
+//     }
+// }
+
+// func TestComputeFormulaNestedParensDivisionFloat(t *testing.T) {
+//     formula := "((10*2)/5)"
+
+//     result := calc.ComputeFormula(formula)
+
+//     if result != 4 {
+//         t.Log(result);
+//         t.Error("expecting result: 4");
+//     }
+// }
