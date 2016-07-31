@@ -22,6 +22,12 @@ func main () {
             break;
         }
 
-        fmt.Printf("The answer is %g\n", calc.ComputeFormula(formula))
+        result, err := calc.ComputeFormula(formula)
+
+        if err != nil {
+            fmt.Printf("%v\n", err);
+        } else {
+            fmt.Printf("The answer is %g\n", result)
+        }
     }
 }

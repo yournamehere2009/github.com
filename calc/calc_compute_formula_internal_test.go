@@ -6,10 +6,12 @@ import (
 
 var computeTests = []struct {
   n        string // input
-  expected float32 // expected result
+  expected float64 // expected result
 }{
   {"2+2", 4},
   {"10*5", 50},
+  {"4", 4},
+  {"-3*2", -6},
 }
 
 var decomposeTests = []struct {
@@ -27,8 +29,8 @@ func TestCompute (t *testing.T){
     for _ , tt := range computeTests {
         contents := tt.n;
 
-        f := ParseFormula(contents);
-        result := compute(f);
+        f, _ := ParseFormula(contents);
+        result, _ := compute(f);
 
         if result != tt.expected {
             t.Errorf("compute(%v): expected %f, actual %f", tt.n, tt.expected, result);
@@ -40,7 +42,7 @@ func TestDecompose (t *testing.T) {
     for _ , tt := range decomposeTests {
         formula := tt.n;
 
-        formula = decompose(formula);
+        formula, _ = decompose(formula);
 
         if formula != tt.expected {
             t.Errorf("decompose(%v): expected %v, actual %v", tt.n, tt.expected, formula);

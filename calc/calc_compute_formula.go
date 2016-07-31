@@ -3,21 +3,47 @@ package calc
 import (
     "strings"
     "strconv"
+    "errors"
+    "log"
 )
 
 //ComputeFormula blah
-func ComputeFormula (formula string) float32 {
-    return compute(ParseFormula(decompose(formula)))
+func ComputeFormula (formula string) (float64, error) {
+    var decomposedFormula string
+    var err error
+    var f *FormulaParts
+
+    log.Printf("ParseFormula(%v)", formula);
+
+    if decomposedFormula, err = decompose(formula); err != nil {
+        return 0, err;
+    }
+
+    log.Printf("ParseFormula(%v), decomposed: %v",formula, decomposedFormula)
+
+    if f, err = ParseFormula(decomposedFormula); err != nil {
+        return 0, err;
+    }
+
+    log.Printf("ParseFormula(%v), ParseFormula: %v", formula, f);
+
+    return compute(f);
 }
 
-func decompose (formula string) string {
+func decompose (formula string) (string, error) {
+    var result float64;
+    var err error;
+    var f *FormulaParts
+
+    log.Println("decompose");
+
     // If we still have parenthesis in the formula
     if strings.Index(formula, "(") != -1 {
         // Find an opening followed by a closing with no other parenthesis in-between
 
         //Starting parenthesis
-        iOpening := 0
-        iClosing := 0
+        iOpening := 0;
+        iClosing := 0;
 
         // Loop over every character
         for i, r := range formula {
@@ -29,30 +55,36 @@ func decompose (formula string) string {
             }
         }
 
-        contents := formula[iOpening + 1: iClosing]
+        contents := formula[iOpening + 1: iClosing];
 
-        f := ParseFormula(contents)
+        if f, err = ParseFormula(contents); err != nil {
+            return "", err;
+        } else if result, err = compute(f); err != nil {
+            return "", err;
+        }
 
-        result := compute(f)
+        formula = strings.Replace(formula, formula[iOpening : iClosing + 1], strconv.FormatFloat(float64(result), 'f', -1, 32), -1);
 
-        formula = strings.Replace(formula, formula[iOpening : iClosing + 1], strconv.FormatFloat(float64(result), 'f', -1, 32), -1)
-
-        formula = decompose(formula)
+        if formula, err = decompose(formula); err != nil {
+            return "", err;
+        }
     }
-    return formula
+    return formula, err;
 }
 
-func compute (fp *FormulaParts) float32 {
-    var result float32
+func compute (fp *FormulaParts) (float64, error) {
+    log.Println("compute");
+
     switch fp.Operator {
         case "+":
-            result = Add(fp.Expression1, fp.Expression2)
+            return Add(fp.Expression1, fp.Expression2), nil;
         case "-":
-            result = Subtract(fp.Expression1, fp.Expression2)
+            return Subtract(fp.Expression1, fp.Expression2), nil;
         case "*":
-            result = Multiply(fp.Expression1, fp.Expression2)
+            return Multiply(fp.Expression1, fp.Expression2), nil;
         case "/":
-            result = Divide(fp.Expression1, fp.Expression2)
+            return Divide(fp.Expression1, fp.Expression2);
+        default:
+            return float64(0), errors.New("Unrecognized operator")
     }
-    return result
 }
