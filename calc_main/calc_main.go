@@ -1,42 +1,33 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
-	"strings"
-
-	"github.com/calc"
+    "fmt"
+    "github.com/calc"
+    "bufio"
+    "os"
+    "strings"
 )
 
-func main() {
-	reader := bufio.NewReader(os.Stdin)
-	result := 0
+func main () {
+    reader := bufio.NewReader(os.Stdin)
 
-	fmt.Println("Welcome to Mike's first Go calculator!")
-	fmt.Println("This basic calculator supports addition, subtraction, multiplication, and division.")
+    fmt.Println("Welcome to Mike's first Go calculator!")
+    fmt.Println("This basic calculator supports addition, subtraction, multiplication, and division.")
 
-	for {
-		fmt.Print("\nWhat can I compute for you? (type 'exit' to stop): ")
-		formula, _ := reader.ReadString('\n')
+    for {
+        fmt.Print("\nWhat can I compute for you? (type 'exit' to stop): ")
+        formula, _ := reader.ReadString('\n')
 
-		if strings.TrimSpace(strings.ToLower(formula)) == "exit" {
-			break
-		}
+        if (strings.TrimSpace(strings.ToLower(formula)) == "exit") {
+            break;
+        }
 
-		formulaParts := calc.ParseFormula(formula)
+        result, err := calc.ComputeFormula(formula)
 
-		switch formulaParts.Operator {
-		case "+":
-			result = calc.Add(formulaParts.Expression1, formulaParts.Expression2)
-		case "-":
-			result = calc.Subtract(formulaParts.Expression1, formulaParts.Expression2)
-		case "*":
-			result = calc.Multiply(formulaParts.Expression1, formulaParts.Expression2)
-		case "/":
-			result = calc.Divide(formulaParts.Expression1, formulaParts.Expression2)
-		}
-
-		fmt.Printf("The answer is %d\n", result)
-	}
+        if err != nil {
+            fmt.Printf("%v\n", err);
+        } else {
+            fmt.Printf("The answer is %g\n", result)
+        }
+    }
 }
