@@ -4,7 +4,6 @@ import (
     "strings"
     "strconv"
     "errors"
-    "log"
 )
 
 //ComputeFormula blah
@@ -13,19 +12,13 @@ func ComputeFormula (formula string) (float64, error) {
     var err error
     var f *FormulaParts
 
-    log.Printf("ParseFormula(%v)", formula);
-
     if decomposedFormula, err = decompose(formula); err != nil {
         return 0, err;
     }
 
-    log.Printf("ParseFormula(%v), decomposed: %v",formula, decomposedFormula)
-
     if f, err = ParseFormula(decomposedFormula); err != nil {
         return 0, err;
     }
-
-    log.Printf("ParseFormula(%v), ParseFormula: %v", formula, f);
 
     return compute(f);
 }
@@ -34,8 +27,6 @@ func decompose (formula string) (string, error) {
     var result float64;
     var err error;
     var f *FormulaParts
-
-    log.Println("decompose");
 
     // If we still have parenthesis in the formula
     if strings.Index(formula, "(") != -1 {
@@ -63,7 +54,7 @@ func decompose (formula string) (string, error) {
             return "", err;
         }
 
-        formula = strings.Replace(formula, formula[iOpening : iClosing + 1], strconv.FormatFloat(float64(result), 'f', -1, 32), -1);
+        formula = strings.Replace(formula, formula[iOpening : iClosing + 1], strconv.FormatFloat(float64(result), 'f', -1, 64), -1);
 
         if formula, err = decompose(formula); err != nil {
             return "", err;
@@ -73,8 +64,6 @@ func decompose (formula string) (string, error) {
 }
 
 func compute (fp *FormulaParts) (float64, error) {
-    log.Println("compute");
-
     switch fp.Operator {
         case "+":
             return Add(fp.Expression1, fp.Expression2), nil;
